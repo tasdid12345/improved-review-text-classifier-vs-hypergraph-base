@@ -1,0 +1,29 @@
+{
+  "question": "Can a cross-validated, word-and-character n-gram logistic regression with class balancing beat a standard TF-IDF logistic regression baseline at classifying the sentiment of short product, movie and restaurant reviews, while keeping word-level weights that can be inspected?",
+  "method": "Single stratified 75/25 split (seed 42). Baseline and improved models are fit on the same training part; only the improved model's C is tuned, by 5-fold stratified CV on training data. Both are evaluated once on the test split.",
+  "dataset": {
+    "name": "UCI Sentiment Labelled Sentences",
+    "source_url": "https://archive.ics.uci.edu/static/public/331/sentiment+labelled+sentences.zip",
+    "n_rows": 2982,
+    "n_train": 2236,
+    "n_test": 746,
+    "same_as_paper": false,
+    "baseline_is_papers_method": false
+  },
+  "metric_name": "macro-F1 on held-out test split",
+  "higher_is_better": true,
+  "baseline": "TF-IDF word unigrams + logistic regression with default C (no class weighting, no tuning).",
+  "improved": "TF-IDF word 1-2-grams plus character 2-5-grams (char_wb), logistic regression with class_weight='balanced', C selected by 5-fold CV grid search on the training split.",
+  "metrics": {
+    "baseline_score": 0.7882037533512064,
+    "improved_score": 0.8123270440251573,
+    "improvement": 0.024123290673950915,
+    "baseline_accuracy": 0.7882037533512064,
+    "improved_accuracy": 0.8123324396782842,
+    "baseline_log_loss": 0.49174145938081526,
+    "improved_log_loss": 0.388295106018381,
+    "improved_cv_macro_f1": 0.8376239350381051,
+    "improved_best_C": 10.0
+  },
+  "notes": "Proxy dataset: short review sentences from Amazon, Yelp and IMDB, not the paper's own data; the paper's hypergraph-attention model was not re-implemented, so the baseline is a standard TF-IDF logistic regression instead. Single split on a small test set, so differences of a few points are within sampling noise. Both models are deterministic given the split (lbfgs LR, no random initialisation), so no multi-seed repeats were needed; the seed only affects the split and CV folds. Exact duplicate sentences were removed before splitting. Word weights for the improved model are written to word_weights.csv (char n-gram weights are not mapped to words). The test set was not used for any tuning or selection."
+}

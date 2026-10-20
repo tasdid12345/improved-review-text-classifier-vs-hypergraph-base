@@ -21,6 +21,26 @@ python analysis.py
 
 Results: written to `results.json` (plus `word_weights.csv` and `figures/macro_f1.png`).
 
+## Results (latest run)
+
+On the UCI Sentiment Labelled Sentences dataset, a class-balanced word and character n-gram logistic regression reached 81.2% macro-F1 on the held-out test split, versus 78.8% for a standard TF-IDF word-unigram logistic regression, a small gain of 2.4 points from one split.
+
+| Metric | Value |
+|---|---|
+| baseline_score | 0.7882 |
+| improved_score | 0.8123 |
+| improvement | 0.02412 |
+| baseline_accuracy | 0.7882 |
+| improved_accuracy | 0.8123 |
+| baseline_log_loss | 0.4917 |
+| improved_log_loss | 0.3883 |
+| improved_cv_macro_f1 | 0.8376 |
+| improved_best_C | 10 |
+
+Run on 2026-10-20. Full output: [results.json](results.json) · [run.log](run.log)
+
+Notes: Proxy dataset: short review sentences from Amazon, Yelp and IMDB, not the paper's own data; the paper's hypergraph-attention model was not re-implemented, so the baseline is a standard TF-IDF logistic regression instead. Single split on a small test set, so differences of a few points are within sampling noise. Both models are deterministic given the split (lbfgs LR, no random initialisation), so no multi-seed repeats were needed; the seed only affects the split and CV folds. Exact duplicate sentences were removed before splitting. Word weights for the improved model are written to word_weights.csv (char n-gram weights are not mapped to words). The test set was not used for any tuning or selection.
+
 ## Reference
 
 This project is motivated by the following paper:
